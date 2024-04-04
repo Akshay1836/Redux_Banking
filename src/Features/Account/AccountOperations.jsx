@@ -5,15 +5,21 @@ import { deposit, payloan, requestloan, withdraw } from "./AccountSlices";
 function AccountOperations() {
   const storeData = useSelector((state) => state);
   console.log(storeData);
+  const { loan: Amount,isLoading } = useSelector(
+    (store) => store.account
+  );
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
   const [loanAmount, setLoanAmount] = useState("");
   const [loanPurpose, setLoanPurpose] = useState("");
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState("INR");
+
   const dispatch = useDispatch();
+
   function handleDeposit() {
     if (depositAmount) {
-      dispatch(deposit(depositAmount));
+      dispatch(deposit(depositAmount,currency));
+      setDepositAmount("");
     }
   }
 
@@ -24,7 +30,7 @@ function AccountOperations() {
   }
 
   function handleRequestLoan() {
-    dispatch(requestloan(loanAmount,loanPurpose));
+    dispatch(requestloan(loanAmount, loanPurpose));
   }
 
   function handlePayLoan() {
@@ -45,13 +51,15 @@ function AccountOperations() {
           <select
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
+            defaultValue="INR"
           >
+            <option value="INR">INR</option>
             <option value="USD">US Dollar</option>
             <option value="EUR">Euro</option>
             <option value="GBP">British Pound</option>
           </select>
 
-          <button onClick={handleDeposit}>Deposit {depositAmount}</button>
+          <button onClick={handleDeposit} disabled={isLoading}>{isLoading ? "Converting": `Deposit ${depositAmount}`}</button>
         </div>
 
         <div>
@@ -82,10 +90,10 @@ function AccountOperations() {
           <button onClick={handleRequestLoan}>Request loan</button>
         </div>
 
-        <div>
-          <span>Pay back $X</span>
+        {Amount>0 && <div>
+          <span>Pay back {Amount}</span>
           <button onClick={handlePayLoan}>Pay loan</button>
-        </div>
+        </div>}
       </div>
     </div>
   );

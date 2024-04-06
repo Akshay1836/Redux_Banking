@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addCustomer } from "./CustomerSlices";
+import { add } from "./CustomerSlices";
 function Customer() {
   const [fullName, setFullName] = useState("");
   const [nationalId, setNationalId] = useState("");
@@ -11,7 +11,7 @@ function Customer() {
     if (!fullName || !nationalId) {
       alert("Please fill in both customer full name and national ID.");
     } else {
-      dispatch(addCustomer(fullName, nationalId));
+      dispatch(add({data:{fullName:fullName, nationalId:nationalId}}));
       
     }
   }

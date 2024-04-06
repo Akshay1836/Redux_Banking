@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { deposit, payloan, requestloan, withdraw } from "./AccountSlices";
 
 function AccountOperations() {
+
   const storeData = useSelector((state) => state);
-  console.log(storeData);
-  const { loan: Amount,isLoading } = useSelector(
-    (store) => store.account
-  );
+  console.log("storeData", storeData);
+  const { loan, isLoading } = useSelector((store) => store.account);
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
   const [loanAmount, setLoanAmount] = useState("");
@@ -59,7 +58,9 @@ function AccountOperations() {
             <option value="GBP">British Pound</option>
           </select>
 
-          <button onClick={handleDeposit} disabled={isLoading}>{isLoading ? "Converting": `Deposit ${depositAmount}`}</button>
+          <button onClick={handleDeposit} disabled={isLoading}>
+            {isLoading ? "Converting" : `Deposit ${depositAmount}`}
+          </button>
         </div>
 
         <div>
@@ -90,10 +91,12 @@ function AccountOperations() {
           <button onClick={handleRequestLoan}>Request loan</button>
         </div>
 
-        {Amount>0 && <div>
-          <span>Pay back {Amount}</span>
-          <button onClick={handlePayLoan}>Pay loan</button>
-        </div>}
+        {loan > 0 && (
+          <div>
+            <span>Pay back {loan}</span>
+            <button onClick={handlePayLoan}>Pay loan</button>
+          </div>
+        )}
       </div>
     </div>
   );
